@@ -7,23 +7,24 @@ var express = require('express')
   , routes = require('./routes')
   // , todo = require('./routes/todo')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , favicon = require('serve-favicon');
 
 var app = express();	// 어플리케이션 생성
 var port = 3000;		// 어플리케이션 포트
 // 어플리케이션 설정
-  app.set('port', port);					// 웹 서버 포트
-  app.set('views', __dirname + '/views');	// 템플릿
-  app.set('view engine', 'ejs');			// 템플릿 엔진
-  // app.use(express.favicon());				// 파비콘
-  // app.use(express.logger('dev'));			// 로그 기록
-  // app.use(express.bodyParser());			// 요청 본문 파싱
-  // app.use(express.methodOverride());		// 구식 브라우저 메소드 지원
-  // app.use(app.router);						// 라우팅
+app.set('port', port);					// 웹 서버 포트
+app.set('views', __dirname + '/views');	// 템플릿
+app.set('view engine', 'ejs');			// 템플릿 엔진
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));				// 파비콘
+// app.use(express.logger('dev'));			// 로그 기록
+// app.use(express.bodyParser());			// 요청 본문 파싱
+// app.use(express.methodOverride());		// 구식 브라우저 메소드 지원
+// app.use(app.router);						// 라우팅
 
-  // 정적 리소스 처리
-  app.use(require('stylus').middleware(__dirname + '/public'));
-  app.use(express.static(path.join(__dirname, 'public')));
+// 정적 리소스 처리
+app.use(require('stylus').middleware(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // app.configure('development', function(){	// 개발 버전
 //   app.use(express.errorHandler());			// 에러 메세지
