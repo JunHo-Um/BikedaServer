@@ -32,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // 라우팅
 app.get('/', routes.index);
+app.get('/branch', routes.branch);
 // app.get('/list', todo.list);
 // app.post('/add', todo.add);
 // app.post('/complete', todo.complete);
