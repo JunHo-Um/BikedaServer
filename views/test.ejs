@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" >
 
 <head>
 
@@ -22,55 +22,41 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
   <script src="socket.io-client/dist/socket.io.js"></script>
-  <script src="angular/angular.min.js"></script>
-  <script>
-  $( function() {
-    var socket = io();
-
-    $('form').submit( function () {
-      alert('aaa');
-      socket.emit('test', 'aaaa');
-      return false;
-    });
-    socket.on( 'test',  function ( msg ) {
-      $('#ttt').append($('<li>')).text( msg );
-    });
-
-  });
-  </script>
-  <!-- <script src="js/bikeda.js"></script> -->
+  <script src="angular/angular.js"></script>
+  <script src="js/bikeda.js"></script>
 </head>
-<body>
-<div class="limiter">
-  <div class="container">
+<body >
+<div class="limiter" >
+  <div class="container" ng-controller="loginCtrl">
     <div class="wrap p-l-55 p-r-55 p-t-65 p-b-50">
-      <form class="login-form validate-form" action="#">
+      <form class="login-form validate-form" >
         <span class="login-form-title p-b-33">
           TEST PAGE
         </span>
         <div class="wrap-input validate-input" data-validate="아이디를 입력하세요">
-          <input class="input" type="text" name="id" placeholder="아이디">
+          <input class="input" type="text" name="id" placeholder="아이디" ng-model="id">
           <span class="focus-input-1"></span>
           <span class="focus-input-2"></span>
         </div>
         <div class="wrap-input rs1 validate-input" data-validate="비밀번호를 입력하세요.">
-          <input class="input" type="password" name="pass" placeholder="비밀번호">
+          <input class="input" type="password" name="pass" placeholder="비밀번호" ng-model="pwd">
           <span class="focus-input-1"></span>
           <span class="focus-input-2"></span>
         </div>
         <div class="container-form-btn m-t-20">
-          <button class="login-form-btn" id="test">
+          <button class="login-form-btn" ng-submit="login()">
             로그인
           </button>
         </div>
       </form>
     </div>
-  </div>
-  <ui id="ttt">
 
-  </ui>
+    <li ng-repeat="login in logins">
+      <span>{{login.id}} / {{login.pwd}}</span>
+    </li>
+  </div>
+
 </div>
 
 </body>
-
 </html>

@@ -5,11 +5,20 @@
 // 모듈 가져오기
 var express = require('express');
 var app = express();
-var routes = require('./routes')
+var bodyParser = require('body-parser')
+var routes = require('./routes');
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
-var path = require('path')
+var path = require('path');
 var favicon = require('serve-favicon');
+var morgan = require('morgan');
+var rfs = require('rotating-file-stream');
+
+// create a write stream (in append mode)
+var accessLogStream = rfs.createStream('access.log', {
+  interval: '1d', // rotate daily
+  path: path.join(__dirname, 'log')
+})
 
 var port = 3000;		// 어플리케이션 포트
 // 어플리케이션 설정
@@ -17,7 +26,7 @@ app.set('port', port);					// 웹 서버 포트
 app.set('views', __dirname + '/views');	// 템플릿
 app.set('view engine', 'ejs');			// 템플릿 엔진
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));				// 파비콘
-// app.use(express.logger('dev'));			// 로그 기록
+app.use(morgan('combined', { stream: accessLogStream }));			// 로그 기록
 // app.use(express.bodyParser());			// 요청 본문 파싱
 // app.use(express.methodOverride());		// 구식 브라우저 메소드 지원
 // app.use(app.router);						// 라우팅
@@ -28,26 +37,24 @@ app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-// app.configure('development', function(){	// 개발 버전
-//   app.use(express.errorHandler());			// 에러 메세지
-// });
-
 // 라우팅
 app.get('/', routes.index);
 app.get('/branch', routes.branch);
 app.get('/test', routes.test);
-// app.get('/list', todo.list);
-// app.post('/add', todo.add);
-// app.post('/complete', todo.complete);
-// app.post('/del', todo.del);
+
+// socket io
+
+var data = [];
+
 io.on( 'connection', function ( socket ) {
   console.log( "User connection" );
   socket.on( 'disconnect', function () {
     console.log( "User disconnection" );
   })
-  socket.on( 'test', function ( msg ) {
-    console.log( msg );
-    io.emit('test', msg);
+  socket.on( 'login', function ( obj ) {
+    console.log( obj );
+    data = obj;
+    io.emit('login', data );
   })
 });
 // 서버 실행
