@@ -3,14 +3,14 @@
  */
 
 // 모듈 가져오기
-var express = require('express')
-  , routes = require('./routes')
-  // , todo = require('./routes/todo')
-  , http = require('http')
-  , path = require('path')
-  , favicon = require('serve-favicon');
+var express = require('express');
+var app = express();
+var routes = require('./routes')
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+var path = require('path')
+var favicon = require('serve-favicon');
 
-var app = express();	// 어플리케이션 생성
 var port = 3000;		// 어플리케이션 포트
 // 어플리케이션 설정
 app.set('port', port);					// 웹 서버 포트
@@ -23,8 +23,10 @@ app.set('view engine', 'ejs');			// 템플릿 엔진
 // app.use(app.router);						// 라우팅
 
 // 정적 리소스 처리
-app.use(require('stylus').middleware(__dirname + '/public'));
+// app.use(require('stylus').middleware(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 // app.configure('development', function(){	// 개발 버전
 //   app.use(express.errorHandler());			// 에러 메세지
@@ -33,12 +35,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 라우팅
 app.get('/', routes.index);
 app.get('/branch', routes.branch);
+app.get('/test', routes.test);
 // app.get('/list', todo.list);
 // app.post('/add', todo.add);
 // app.post('/complete', todo.complete);
 // app.post('/del', todo.del);
-
+io.on( 'connection', function ( socket ) {
+  console.log( "User connection" );
+  socket.on( 'disconnect', function () {
+    console.log( "User disconnection" );
+  })
+  socket.on( 'test', function ( msg ) {
+    console.log( msg );
+    io.emit('test', msg);
+  })
+});
 // 서버 실행
-http.createServer(app).listen(app.get('port'), function(){
+http.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });

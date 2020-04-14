@@ -9,3 +9,6 @@ exports.index = function(req, res){
 exports.branch = function(req, res){
   res.render('login_branch', { title: 'branch' });
 };
+exports.test = function(req, res){
+  res.render('test', { title: 'branch' });
+};
