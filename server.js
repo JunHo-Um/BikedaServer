@@ -35,6 +35,8 @@ app.use(morgan('combined', { stream: accessLogStream }));			// 로그 기록
 // app.use(require('stylus').middleware(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'app_modules')));
+app.use(express.static(path.join(__dirname, 'app_object')));
 
 
 // 라우팅

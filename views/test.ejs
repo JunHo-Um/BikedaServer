@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" >
+<html lang="ko" ng-app="bikeda">
 
 <head>
 
@@ -29,7 +29,7 @@
 <div class="limiter" >
   <div class="container" ng-controller="loginCtrl">
     <div class="wrap p-l-55 p-r-55 p-t-65 p-b-50">
-      <form class="login-form validate-form" >
+      <form class="login-form validate-form" name="loginFrom" ng-submit="login()">
         <span class="login-form-title p-b-33">
           TEST PAGE
         </span>
@@ -44,7 +44,7 @@
           <span class="focus-input-2"></span>
         </div>
         <div class="container-form-btn m-t-20">
-          <button class="login-form-btn" ng-submit="login()">
+          <button class="login-form-btn" >
             로그인
           </button>
         </div>
