@@ -5,4 +5,9 @@ var router = express.Router();
 router.get('/', function( req, res, next ){
   res.render( 'admin/login' );
 });
+
+router.post('/main', function( req, res, next ){
+  res.render( 'admin/main' );
+});
+
 module.exports = router;
