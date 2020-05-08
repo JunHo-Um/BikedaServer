@@ -1,45 +1,40 @@
-/**
- * Module dependencies.
- */
-
 // 모듈 가져오기
 var express = require('express');
-var app = express();
-var routes = require('./routes')
-var http = require('http').createServer(app);
-var io = require('socket.io')(http);
 var path = require('path')
 var favicon = require('serve-favicon');
+var app = express();
+var debug = require('debug')('bikedaserver:server');
+var http = require('http')
 
-var port = 3000;		// 어플리케이션 포트
+require('dotenv').config();
 // 어플리케이션 설정
-app.set('port', port);					// 웹 서버 포트
-app.set('views', __dirname + '/views');	// 템플릿
-app.set('view engine', 'ejs');			// 템플릿 엔진
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));				// 파비콘
-// app.use(express.logger('dev'));			// 로그 기록
-// app.use(express.bodyParser());			// 요청 본문 파싱
-// app.use(express.methodOverride());		// 구식 브라우저 메소드 지원
-// app.use(app.router);						// 라우팅
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
 
-// 정적 리소스 처리
-// app.use(require('stylus').middleware(__dirname + '/public'));
-app.use(express.static(path.join(__dirname, 'node_modules')));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');			// 템플릿 엔진
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-// app.configure('development', function(){	// 개발 버전
-//   app.use(express.errorHandler());			// 에러 메세지
-// });
+app.use(function(req, res, next) {
+ res.header('Access-Control-Allow-Origin', '*');
+ res.header('Access-Control-Allow-Methods', 'GET, POST');
+ res.header('Access-Control-Allow-Headers', 'content-type');
+ next();
+});
 
 // 라우팅
-app.get('/', routes.index);
-app.get('/branch', routes.branch);
-app.get('/test', routes.test);
-// app.get('/list', todo.list);
-// app.post('/add', todo.add);
-// app.post('/complete', todo.complete);
-// app.post('/del', todo.del);
+var index = require('./routes/index');
+var admin = require('./routes/admin');
+
+app.use('/', index );
+app.use('/admin', admin);
+
+var server = http.createServer(app);
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+var io = require('socket.io')(server);
 io.on( 'connection', function ( socket ) {
   console.log( "User connection" );
   socket.on( 'disconnect', function () {
@@ -50,7 +45,50 @@ io.on( 'connection', function ( socket ) {
     io.emit('test', msg);
   })
 });
-// 서버 실행
-http.listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
-});
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
