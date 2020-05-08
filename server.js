@@ -1,10 +1,20 @@
 // 모듈 가져오기
 var express = require('express');
-var path = require('path')
-var favicon = require('serve-favicon');
 var app = express();
-var debug = require('debug')('bikedaserver:server');
-var http = require('http')
+var bodyParser = require('body-parser')
+var routes = require('./routes');
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+var path = require('path');
+var favicon = require('serve-favicon');
+var morgan = require('morgan');
+var rfs = require('rotating-file-stream');
+
+// create a write stream (in append mode)
+var accessLogStream = rfs.createStream('access.log', {
+  interval: '1d', // rotate daily
+  path: path.join(__dirname, 'log')
+})
 
 require('dotenv').config();
 // 어플리케이션 설정
@@ -13,36 +23,35 @@ app.set('port', port);
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');			// 템플릿 엔진
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));				// 파비콘
+app.use(morgan('combined', { stream: accessLogStream }));			// 로그 기록
+// app.use(express.bodyParser());			// 요청 본문 파싱
+// app.use(express.methodOverride());		// 구식 브라우저 메소드 지원
+// app.use(app.router);						// 라우팅
 
-app.use(function(req, res, next) {
- res.header('Access-Control-Allow-Origin', '*');
- res.header('Access-Control-Allow-Methods', 'GET, POST');
- res.header('Access-Control-Allow-Headers', 'content-type');
- next();
-});
+// 정적 리소스 처리
+// app.use(require('stylus').middleware(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, 'node_modules')));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'app_modules')));
+app.use(express.static(path.join(__dirname, 'app_object')));
+
 
 // 라우팅
-var index = require('./routes/index');
-var admin = require('./routes/admin');
+app.get('/', routes.index);
+app.get('/branch', routes.branch);
+app.get('/test', routes.test);
 
-app.use('/', index );
-app.use('/admin', admin);
 
-var server = http.createServer(app);
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-
-var io = require('socket.io')(server);
 io.on( 'connection', function ( socket ) {
   console.log( "User connection" );
   socket.on( 'disconnect', function () {
     console.log( "User disconnection" );
   })
-  socket.on( 'test', function ( msg ) {
-    console.log( msg );
-    io.emit('test', msg);
+  socket.on( 'login', function ( obj ) {
+    console.log( obj );
+    data = obj;
+    io.emit('login', data );
   })
 });
 function normalizePort(val) {
