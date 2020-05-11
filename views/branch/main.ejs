@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<%- include ('header')%>
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <%- include ('topMenu')%>
+  <!-- Left side column. contains the logo and sidebar -->
+  <%- include ('sideMenu')%>
+    <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>배달대행
+              <small>실시간 배달대행 현황</small>
+            </h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- 배달 현황 -->
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+        <div class="box box-info">
+          <div class="box-header with-border">
+            <!-- <h3 class="box-title">Horizontal Form</h3> -->
+            <button type="button" class="btn btn-info">주문취소</button>
+            <button type="button" class="btn btn-info">배달완료</button>
+          </div>
+            <div class="box-body">
+              <table id="dataTable1" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th class="">상호</th>
+                  <th class="d-xs-none d-xs-none d-md-block">상점주소</th>
+                  <th class="">목적지주소</th>
+                  <th class="">주문시간</th>
+                  <th class="">배차상태</th>
+                  <th class="">배달거리</th>
+                  <th class="">수수료</th>
+                  <th class="">결제종류</th>
+                </tr>
+                </thead>
+              </table>
+            </div>
+        </div>
+      </div>
+
+      <!-- 라이더 현황 -->
+      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        <div class="box box-info">
+          <div class="box-header with-border">
+            <h3 class="box-title">리이더 현황</h3>
+          </div>
+            <div class="box-body">
+              <table id="dataTable2" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>이름</th>
+                  <th>근퇴</th>
+                  <th>총건수</th>
+                  <th>진행중 건수</th>
+                </tr>
+                </thead>
+              </table>
+            </div>
+        </div>
+      </div>
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- ./wrapper -->
+<%- include ('footer')%>
+<!-- DataTables -->
+<script src="../bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="../bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="../javascripts/branch/dms/deliveryMain.js"></script>
+</body>
+</html>

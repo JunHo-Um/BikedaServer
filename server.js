@@ -28,9 +28,11 @@ app.use(function(req, res, next) {
 // 라우팅
 var index = require('./routes/index');
 var admin = require('./routes/admin');
+var branch = require('./routes/branch');
 
 app.use('/', index );
 app.use('/admin', admin);
+app.use('/branch', branch);
 
 var server = http.createServer(app);
 server.listen(port);

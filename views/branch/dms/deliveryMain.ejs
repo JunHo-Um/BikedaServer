@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<%- include ('../header')%>
+<link rel="stylesheet" href="public/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <%- include ('../topMenu')%>
+  <!-- Left side column. contains the logo and sidebar -->
+  <%- include ('../sideMenu')%>
+    <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        배달대행
+        <small>실시간 배달대행 현황</small>
+      </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- 배달 현황 -->
+      <div class="col-md-8">
+        <div class="box box-info">
+          <div class="box-header with-border">
+            <!-- <h3 class="box-title">Horizontal Form</h3> -->
+            <button type="button" class="btn btn-info">주문취소</button>
+            <button type="button" class="btn btn-info">배달완료</button>
+          </div>
+            <div class="box-body">
+              <table id="dataTable1" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>상호</th>
+                  <th>상점주소</th>
+                  <th>목적지주소</th>
+                  <th>주문시간</th>
+                  <th>배차상태</th>
+                  <th>배달거리</th>
+                  <th>수수료</th>
+                  <th>결제종류</th>
+                </tr>
+                </thead>
+              </table>
+            </div>
+        </div>
+      </div>
+
+      <!-- 라이더 현황 -->
+      <div class="col-md-4">
+        <div class="box box-info">
+          <div class="box-header with-border">
+            <h3 class="box-title">리이더 현황</h3>
+          </div>
+            <div class="box-body">
+              <table id="dataTable2" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>이름</th>
+                  <th>근퇴</th>
+                  <th>총건수</th>
+                  <th>진행중 건수</th>
+                </tr>
+                </thead>
+              </table>
+            </div>
+        </div>
+      </div>
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- ./wrapper -->
+<%- include ('../footer')%>
+<!-- DataTables -->
+<script src="public/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="public/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="routes/dms/deliveryMain.js"></script>
+</body>
+</html>
