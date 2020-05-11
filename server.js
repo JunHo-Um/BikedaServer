@@ -5,6 +5,7 @@ var favicon = require('serve-favicon');
 var app = express();
 var debug = require('debug')('bikedaserver:server');
 var http = require('http')
+var bodyParser = require('body-parser');
 
 require('dotenv').config();
 // 어플리케이션 설정
@@ -14,11 +15,13 @@ app.set('port', port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');			// 템플릿 엔진
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(function(req, res, next) {
  res.header('Access-Control-Allow-Origin', '*');
  res.header('Access-Control-Allow-Methods', 'GET, POST');
- res.header('Access-Control-Allow-Headers', 'content-type');
+ res.header('Access-Control-Allow-Headers', 'content-type, x-access-token');
  next();
 });
 

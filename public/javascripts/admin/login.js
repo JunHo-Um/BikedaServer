@@ -8,19 +8,26 @@ $(document).ready( function () {
         brcofcBsnsRgnmb : $('#adminId').val(),
         brcofcPassword : $('#adminPassword').val()
       };
+
       jQuery.ajax({
         type: "POST",
         url: "http://127.0.0.1:8080/api/auth/branch",
         dataType: "JSON",
         data: data,
         success:function ( data ) {
-          alert(data);
-        },
-        complete:function ( data ) {
-          alert(data);
+          var form = document.createElement('form');
+	        var objs = document.createElement('input');
+	        objs.setAttribute('type', 'hidden');
+	        objs.setAttribute('name', 'adminId');      // 받을 네이밍
+	        objs.setAttribute('value', adminId);       // 넘길 파라메터
+	        form.appendChild(objs);
+	        form.setAttribute('method', 'POST');
+	        form.setAttribute('action', "/admin/main");      // URL
+	        document.body.appendChild(form);
+	        form.submit();
         },
         error:function ( xhr, status, error) {
-          alert(status);
+          console.log(error);
         }
       });
     });

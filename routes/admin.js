@@ -7,7 +7,8 @@ router.get('/', function( req, res, next ){
 });
 
 router.post('/main', function( req, res, next ){
-  res.render( 'admin/main' );
+  console.log( req.body.adminId );
+  res.render( 'admin/main', req.body );
 });
 
 module.exports = router;
